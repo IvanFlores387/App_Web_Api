@@ -1,6 +1,6 @@
 import os
 from pathlib import Path
-import dj_database_url   # <-- importante para Render
+import dj_database_url   # importante para Render
 
 # ==========================
 # RUTAS
@@ -12,7 +12,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # CONFIGURACIÓN BÁSICA
 # ==========================
 
-# En Render pon SECRET_KEY como variable de entorno; aquí dejamos un fallback
+# En Render pon SECRET_KEY como variable de entorno; aquí dejamos un fallback para desarrollo
 SECRET_KEY = os.environ.get(
     "SECRET_KEY",
     "-_&+lsebec(whhw!%n@ww&1j=4-^j_if9x8$q778+99oz&!ms2"
@@ -24,9 +24,18 @@ DEBUG = os.environ.get("DEBUG", "True") == "True"
 ALLOWED_HOSTS = [
     "localhost",
     "127.0.0.1",
-    ".onrender.com",                 # cualquier dominio de Render
+    ".onrender.com",                  # cualquier dominio de Render
     "ivanflores387.pythonanywhere.com",  # por si sigues usando PA para algo
 ]
+
+# Si usas cookies/CSRF desde frontend, esto ayuda con 403 en producción
+CSRF_TRUSTED_ORIGINS = [
+    "https://sistema-web-app.vercel.app",
+    "https://*.onrender.com",
+]
+
+# Para que Django respete HTTPS detrás del proxy de Render
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
 # ==========================
 # APPS
@@ -135,7 +144,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 LANGUAGE_CODE = "en-us"
-TIME_ZONE = "UTC"
+TIME_ZONE = "UTC"  # si quieres, puedes cambiar a 'America/Mexico_City'
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
