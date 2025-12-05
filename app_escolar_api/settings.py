@@ -1,35 +1,26 @@
 import os
 from pathlib import Path
-from dotenv import load_dotenv   # necesitas tener instalado python-dotenv
 
 # ==========================
-# RUTAS / .ENV
+# RUTAS
 # ==========================
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-
-# Cargar variables desde .env (en la misma carpeta que manage.py)
-load_dotenv(BASE_DIR / '.env')
 
 # ==========================
 # CONFIGURACIÓN BÁSICA
 # ==========================
 
-# Si en .env existe SECRET_KEY la toma, si no usa la que ya tenías
-SECRET_KEY = os.getenv(
-    'SECRET_KEY',
-    '-_&+lsebec(whhw!%n@ww&1j=4-^j_if9x8$q778+99oz&!ms2'
-)
+SECRET_KEY = '-_&+lsebec(whhw!%n@ww&1j=4-^j_if9x8$q778+99oz&!ms2'
 
-# En producción en PythonAnywhere pon DEBUG=False en tu .env
-DEBUG = os.getenv('DEBUG', 'True') == 'True'
+# Puedes poner True mientras pruebas; en producción pon False
+DEBUG = True
 
-# En .env puedes poner:
-# ALLOWED_HOSTS=localhost,127.0.0.1,ivanflores387.pythonanywhere.com
-ALLOWED_HOSTS = os.getenv(
-    'ALLOWED_HOSTS',
-    'localhost,127.0.0.1,ivanflores387.pythonanywhere.com'
-).split(',')
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+    'ivanflores387.pythonanywhere.com',
+]
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -38,17 +29,17 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django_filters',                 # necesarios para los filtros de DRF
+    'django_filters',
     'rest_framework',
-    'rest_framework.authtoken',       # conserva soporte de tokens de DRF
-    'corsheaders',                    # librería CORS actualizada
+    'rest_framework.authtoken',
+    'corsheaders',
     'app_escolar_api',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'corsheaders.middleware.CorsMiddleware',     # CORS debe ir antes de CommonMiddleware
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -60,12 +51,10 @@ MIDDLEWARE = [
 # CORS
 # ==========================
 
-# En tu .env puedes poner:
-# CORS_ALLOWED_ORIGINS=https://sistema-web-app.vercel.app,http://localhost:4200
-CORS_ALLOWED_ORIGINS = os.getenv(
-    'CORS_ALLOWED_ORIGINS',
-    'https://sistema-web-app.vercel.app,http://localhost:4200'
-).split(',')
+CORS_ALLOWED_ORIGINS = [
+    'https://sistema-web-app.vercel.app',
+    'http://localhost:4200',
+]
 
 CORS_ALLOW_CREDENTIALS = True
 
@@ -99,24 +88,17 @@ TEMPLATES = [
 WSGI_APPLICATION = 'app_escolar_api.wsgi.application'
 
 # ==========================
-# BASE DE DATOS (MySQL)
+# BASE DE DATOS (MySQL EN PYTHONANYWHERE)
 # ==========================
-# En tu .env de PythonAnywhere:
-# DB_NAME=ivanflores387$App_Web_Api
-# DB_USER=ivanflores387
-# DB_PASSWORD=TU_PASSWORD_MYSQL
-# DB_HOST=ivanflores387.mysql.pythonanywhere-services.com
-# DB_PORT=3306
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.getenv('DB_NAME', 'ivanflores387$App_Web_Api'),
-        'USER': os.getenv('DB_USER', 'ivanflores387'),
-        'PASSWORD': os.getenv('DB_PASSWORD', ''),  # pon la contraseña en el .env
-        # MUY IMPORTANTE: por defecto usa el host de PythonAnywhere, NO 127.0.0.1
-        'HOST': os.getenv('DB_HOST', 'ivanflores387.mysql.pythonanywhere-services.com'),
-        'PORT': os.getenv('DB_PORT', '3306'),
+        'NAME': 'ivanflores387$App_Web_Api',                 # nombre exacto de tu BD
+        'USER': 'ivanflores387',                             # tu usuario de PythonAnywhere
+        'PASSWORD': 'AQUI_TU_PASSWORD_MYSQL',                # <-- cámbialo por la contraseña que pusiste en "Databases"
+        'HOST': 'ivanflores387.mysql.pythonanywhere-services.com',
+        'PORT': '3306',
         'OPTIONS': {
             'charset': 'utf8mb4',
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
